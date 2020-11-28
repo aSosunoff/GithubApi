@@ -3,7 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@asosunoff/react-table": "0.0.6",
+		"@asosunoff/react-table": "0.0.7",
 		"axios": "^0.21.0",
 		"material-icons": "^0.3.1",
 		"react": "^16.13.1",
