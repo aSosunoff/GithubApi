@@ -1,20 +1,27 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo/* , useState */ } from "react";
 /* import ReactDOM from "react-dom"; */
-import { v4 } from "uuid";
+/* import { v4 } from "uuid"; */
 import "material-icons/iconfont/material-icons.css";
 import Table from "@asosunoff/react-table";
+import { withHOC } from "./HOC/withHOC";
+import { GithubState } from "./context/Github/state";
+import { useGithubContext } from "./context/Github/context";
 
 /* utils */
-const newRecord = (id, text, name) => ({
+/* const newRecord = (id, text, name) => ({
 	id,
 	text,
 	name,
-});
+}); */
 /*  */
 
-const App = () => {
+const App = ({ users }) => {
+	const { search } = useGithubContext();
+
+	const searchHandler = useCallback(search);
+
 	/* TABLE */
-	const [list, setList] = useState([
+	/* const [list, setList] = useState([
 		newRecord(2, "aa", "bb"),
 		newRecord(1, "a", "b"),
 		newRecord(3, "aaa", "bbb"),
@@ -41,17 +48,17 @@ const App = () => {
 		(record) =>
 			setList((prev) => [...prev.filter(({ id }) => id !== record.id)]),
 		[]
-	);
+	); */
 	/*  */
 
-	const filterList = useMemo(
+	/* const filterList = useMemo(
 		() =>
 			list.map(({ id, text }) => ({
 				id,
 				text,
 			})),
 		[list]
-	);
+	); */
 
 	const header = useMemo(
 		() => ({
@@ -62,10 +69,10 @@ const App = () => {
 					type: "number",
 					direction: "asc",
 				},
-				filter: {
+				/* filter: {
 					type: "list",
 					items: filterList,
-				},
+				}, */
 				btns: [
 					{
 						title: "Посмотреть данные",
@@ -100,13 +107,13 @@ const App = () => {
 				titleHead: "Наименование",
 			},
 		}),
-		[filterList]
+		[/* filterList */]
 	);
 
 	return (
 		<Table
 			title="Таблица"
-			list={list}
+			list={users}
 			header={header}
 			pageSize={10}
 			rowsBtn={[
@@ -115,20 +122,24 @@ const App = () => {
 					handler: (record) => alert(JSON.stringify(record)),
 					icon: "remove_red_eye",
 				},
-				{
+				/* {
 					title: ({ id }) => `Удалить запись ${id}`,
 					handler: deleteRecord,
 					icon: "delete",
-				},
+				}, */
 			]}
 			controlPanel={[
-				{
+				/* {
 					title: "Добавить запись",
 					handler: addRecord,
+				}, */
+				{
+					title: "Github",
+					handler: () => searchHandler(),
 				},
 			]}
 		/>
 	);
 };
 
-export default App;
+export default withHOC(GithubState)(App);
