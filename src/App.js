@@ -63,7 +63,11 @@ const App = () => {
 	const header = useMemo(
 		() => ({
 			login: {
-				format: (value, record) => <a href={record.html_url}>{value}</a>,
+				format: (value, record) => (
+					<a href={record.html_url} target="_blank" rel="noopener noreferrer">
+						{value}
+					</a>
+				),
 			},
 			/* id: {
 				titleHead: "№",
@@ -124,7 +128,7 @@ const App = () => {
 			rowsBtn={[
 				{
 					title: "Просмотреть запись",
-					handler: (record) => alert(JSON.stringify(record)),
+					handler: (record) => alert(JSON.stringify(record, null, 4)),
 					icon: "remove_red_eye",
 				},
 				/* {
