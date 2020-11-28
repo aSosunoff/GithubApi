@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo/* , useState */ } from "react";
+import React, { useCallback, useMemo /* , useState */ } from "react";
 /* import ReactDOM from "react-dom"; */
 /* import { v4 } from "uuid"; */
 import "material-icons/iconfont/material-icons.css";
@@ -15,8 +15,8 @@ import { useGithubContext } from "./context/Github/context";
 }); */
 /*  */
 
-const App = ({ users }) => {
-	const { search } = useGithubContext();
+const App = () => {
+	const { search, users } = useGithubContext();
 
 	const searchHandler = useCallback(search);
 
@@ -62,17 +62,20 @@ const App = ({ users }) => {
 
 	const header = useMemo(
 		() => ({
-			id: {
+			login: {
+				format: (value, record) => <a href={record.html_url}>{value}</a>,
+			},
+			/* id: {
 				titleHead: "№",
 				width: "170px",
 				order: {
 					type: "number",
 					direction: "asc",
 				},
-				/* filter: {
+				filter: {
 					type: "list",
 					items: filterList,
-				}, */
+				},
 				btns: [
 					{
 						title: "Посмотреть данные",
@@ -80,8 +83,8 @@ const App = ({ users }) => {
 						icon: "remove_red_eye",
 					},
 				],
-			},
-			text: {
+			}, */
+			/* text: {
 				titleHead: "Текст",
 				order: {
 					type: "string",
@@ -105,9 +108,11 @@ const App = ({ users }) => {
 			},
 			name: {
 				titleHead: "Наименование",
-			},
+			}, */
 		}),
-		[/* filterList */]
+		[
+			/* filterList */
+		]
 	);
 
 	return (

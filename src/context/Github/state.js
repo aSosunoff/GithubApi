@@ -17,7 +17,7 @@ export const GithubState = ({ children }) => {
 	const search = async (value) => {
 		const { data } = await axios.get("https://api.github.com/search/users", {
 			params: {
-				q: value,
+				q: 'aSosunoff',
 				client_id,
 				client_secret,
 			},
