@@ -63,11 +63,7 @@ const App = () => {
 	const header = useMemo(
 		() => ({
 			login: {
-				format: (value, record) => (
-					<a href={record.html_url} target="_blank" rel="noopener noreferrer">
-						{value}
-					</a>
-				),
+				titleHead: "Логин",
 			},
 			/* id: {
 				titleHead: "№",
@@ -126,6 +122,15 @@ const App = () => {
 			header={header}
 			pageSize={10}
 			rowsBtn={[
+				{
+					title: "Перейти на Github",
+					handler: (record) => {
+						const otherWindow = window.open();
+						otherWindow.opener = null;
+						otherWindow.location = record.html_url;
+					},
+					icon: "link",
+				},
 				{
 					title: "Просмотреть запись",
 					handler: (record) => alert(JSON.stringify(record, null, 4)),
