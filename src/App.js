@@ -6,7 +6,7 @@ import { withHOC } from "./HOC/withHOC";
 import { GithubState } from "./context/Github/state";
 import { useGithubContext } from "./context/Github/context";
 /* import Loader from "./components/loader"; */
-import Backdrop from "./components/backdrop";
+import Modal from "./components/modal";
 
 const App = () => {
 	const [filterState, setFilter] = useState({});
@@ -74,10 +74,11 @@ const App = () => {
 
 	return (
 		<>
-			<Backdrop
-				isShow={isShowModal}
-				clickHandler={() => setShowModal(false)}
-			></Backdrop>
+			<Modal isShow={isShowModal} onHideModal={() => setShowModal(false)}>
+				<Modal.Title>Title</Modal.Title>
+				<Modal.Body>Body</Modal.Body>
+				<Modal.Footer>Footer</Modal.Footer>
+			</Modal>
 
 			<Table
 				title="Таблица"

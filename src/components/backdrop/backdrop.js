@@ -1,10 +1,11 @@
 import React from "react";
+import cn from "classnames";
 import styles from "./backdrop.module.scss";
 
-const Backdrop = ({ isShow, clickHandler, children }) => {
+const Backdrop = ({ isShow, clickHandler, children, className }) => {
 	return (
 		isShow && (
-			<div className={styles.backdrop} onClick={clickHandler}>
+			<div className={cn(styles.backdrop, className)} onClick={clickHandler}>
 				{children}
 			</div>
 		)
