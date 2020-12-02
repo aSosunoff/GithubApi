@@ -2,10 +2,6 @@
 
 ![GithubApi](./GithubApi.gif)
 
-## Demo:
-
-[https://asosunoff.github.io/GithubApi/](https://asosunoff.github.io/GithubApi/)
-
 ### Launch project:
 
 ```
