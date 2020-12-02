@@ -1,33 +1,20 @@
 import produce from "immer";
-import { CLEAR_USERS, SEARCH_USERS, UPDATE_USERS, MERGE_USERS } from "./types";
+import { CLEAR_USERS, SEARCH_USERS, GET_USER } from "./types";
 
 export const initialState = {
 	users: [],
+	user: {},
 	userFullInfo: [],
 	total_count: 0,
 };
 
 const handlers = {
 	[SEARCH_USERS]: (draft, { users, total_count }) => {
-		draft.users = users.map((user) => ({
-			...user,
-			isLoadFullInfo: false,
-		}));
+		draft.users = users;
 		draft.total_count = total_count;
 	},
-	[UPDATE_USERS]: (draft, { user }) => {
-		draft.userFullInfo.push(user);
-	},
-	[MERGE_USERS]: (draft) => {
-		const getUserInfo = (login) =>
-			draft.userFullInfo.find((user) => login === user.login);
-
-		draft.users.forEach((user) => {
-			user.isLoadFullInfo = true;
-			user.name = getUserInfo(user.login)?.name;
-		});
-
-		draft.userFullInfo = [];
+	[GET_USER]: (draft, { user }) => {
+		draft.user = user;
 	},
 	[CLEAR_USERS]: () => {
 		return initialState;

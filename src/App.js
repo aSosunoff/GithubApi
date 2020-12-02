@@ -1,11 +1,11 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 /* import ReactDOM from "react-dom"; */
 import "material-icons/iconfont/material-icons.css";
 import Table from "@asosunoff/react-table";
 import { withHOC } from "./HOC/withHOC";
 import { GithubState } from "./context/Github/state";
 import { useGithubContext } from "./context/Github/context";
-import Loader from "./components/loader";
+/* import Loader from "./components/loader"; */
 
 const App = () => {
 	const [filterState, setFilter] = useState({});
@@ -16,9 +16,7 @@ const App = () => {
 	});
 
 	const {
-		getUserInfoByLoginHandler,
-		searchUserByLoginHandler,
-		mergeUserInfoHandler,
+		searchUserHandler,
 		clearUserHandler,
 		users,
 		total_count,
@@ -35,7 +33,7 @@ const App = () => {
 
 			const currentPage = 1;
 			if (Object.keys(filter).length) {
-				searchUserByLoginHandler(filter, currentPage, pagination.pageSize);
+				searchUserHandler(filter, currentPage, pagination.pageSize);
 				setFilter(filter);
 			} else {
 				clearUserHandler();
@@ -48,7 +46,7 @@ const App = () => {
 			}));
 		},
 		[
-			searchUserByLoginHandler,
+			searchUserHandler,
 			clearUserHandler,
 			pagination.pageSize,
 			setFilter,
@@ -58,30 +56,18 @@ const App = () => {
 
 	const onPageHandler = useCallback(
 		(currentPage) => {
-			if (!Object.keys(filter).length) {
+			if (!Object.keys(filterState).length) {
 				return;
 			}
 
-			searchUserByLoginHandler(filterState, currentPage, pagination.pageSize);
+			searchUserHandler(filterState, currentPage, pagination.pageSize);
 			setPagination((prev) => ({
 				...prev,
 				currentPage,
 			}));
 		},
-		[filterState, pagination.pageSize, setPagination, searchUserByLoginHandler]
+		[filterState, pagination.pageSize, setPagination, searchUserHandler]
 	);
-
-	useEffect(() => {
-		(async () => {
-			if (!users.length) {
-				return;
-			}
-			for (const user of users) {
-				await getUserInfoByLoginHandler(user.login);
-			}
-			mergeUserInfoHandler();
-		})();
-	}, [getUserInfoByLoginHandler, users, mergeUserInfoHandler]);
 
 	return (
 		<Table
@@ -109,18 +95,6 @@ const App = () => {
 					titleHead: "Логин",
 					filter: {
 						type: "text",
-					},
-				},
-				name: {
-					titleHead: "Имя",
-					filter: {
-						type: "text",
-					},
-					format: (value, record) => {
-						if (!users.length) {
-							return;
-						}
-						return record.isLoadFullInfo ? value : <Loader />;
 					},
 				},
 			}}
