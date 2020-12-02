@@ -8,7 +8,7 @@ import { useGithubContext } from "./context/Github/context";
 import Loader from "./components/loader";
 
 const App = () => {
-	const [filterState, setFilter] = useState("");
+	const [filterState, setFilter] = useState({});
 
 	const [pagination, setPagination] = useState({
 		pageSize: 5,
@@ -25,11 +25,18 @@ const App = () => {
 	} = useGithubContext();
 
 	const onFilterHandler = useCallback(
-		({ login }) => {
+		(filters) => {
+			const filter = Object.fromEntries(
+				Object.entries(filters).map(([nameField, { value }]) => [
+					nameField,
+					value,
+				])
+			);
+
 			const currentPage = 1;
-			if (login) {
-				searchUserByLoginHandler(login.value, currentPage, pagination.pageSize);
-				setFilter(login.value);
+			if (Object.keys(filter).length) {
+				searchUserByLoginHandler(filter, currentPage, pagination.pageSize);
+				setFilter(filter);
 			} else {
 				clearUserHandler();
 				setFilter("");
@@ -51,7 +58,7 @@ const App = () => {
 
 	const onPageHandler = useCallback(
 		(currentPage) => {
-			if (!filterState) {
+			if (!Object.keys(filter).length) {
 				return;
 			}
 
