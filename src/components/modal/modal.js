@@ -36,7 +36,7 @@ const Modal = ({
 			document.contains(target) &&
 			!target.closest(`.${styles["modal-back__item"]}.${uniqID}`) &&
 			onHideModal(),
-		[onHideModal]
+		[onHideModal, uniqID]
 	);
 
 	const title = Array.isArray(children)
