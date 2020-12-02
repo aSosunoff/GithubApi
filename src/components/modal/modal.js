@@ -1,7 +1,8 @@
 import React from "react";
-import styles from "./backdrop.module.scss";
+import styles from "./modal.module.css";
+import Backdrop from "../backdrop";
 
-const Backdrop = ({ isShow, clickHandler, children }) => {
+export default ({ isShow, clickHandler, children }) => {
 	return (
 		isShow && (
 			<div className={styles.backdrop} onClick={clickHandler}>
@@ -10,5 +11,3 @@ const Backdrop = ({ isShow, clickHandler, children }) => {
 		)
 	);
 };
-
-export default Backdrop;

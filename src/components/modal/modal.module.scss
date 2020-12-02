@@ -1,0 +1,27 @@
+.modal-back {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	& .modal-back__item {
+		display: grid;
+		& .modal-back__title {
+			height: 40px;
+			background-color: var(--color-title);
+			color: #fff;
+			padding: 0px 15px;
+			display: flex;
+			align-items: center;
+		}
+		& .modal-back__body {
+			display: grid;
+			padding: 15px;
+			max-height: 650px;
+			overflow: auto;
+		}
+		& .modal-back__footer {
+			margin-top: 5px;
+			display: flex;
+			justify-content: flex-end;
+		}
+	}
+}
