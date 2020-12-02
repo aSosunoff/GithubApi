@@ -6,6 +6,7 @@ import { withHOC } from "./HOC/withHOC";
 import { GithubState } from "./context/Github/state";
 import { useGithubContext } from "./context/Github/context";
 /* import Loader from "./components/loader"; */
+import Backdrop from "./components/backdrop";
 
 const App = () => {
 	const [filterState, setFilter] = useState({});
@@ -69,59 +70,68 @@ const App = () => {
 		[filterState, pagination.pageSize, setPagination, searchUserHandler]
 	);
 
+	const [isShowModal, setShowModal] = useState(false);
+
 	return (
-		<Table
-			title="Таблица"
-			recordStyles={{
-				height: "71px",
-			}}
-			list={users}
-			header={{
-				avatar_url: {
-					width: "100px",
-					titleHead: "Аватар",
-					format: (value, record) =>
-						value && (
-							<img
-								alt={record.login}
-								style={{
-									maxWidth: "70px",
-								}}
-								src={value}
-							/>
-						),
-				},
-				login: {
-					titleHead: "Логин",
-					filter: {
-						type: "text",
+		<>
+			<Backdrop
+				isShow={isShowModal}
+				clickHandler={() => setShowModal(false)}
+			></Backdrop>
+
+			<Table
+				title="Таблица"
+				recordStyles={{
+					height: "71px",
+				}}
+				list={users}
+				header={{
+					avatar_url: {
+						width: "100px",
+						titleHead: "Аватар",
+						format: (value, record) =>
+							value && (
+								<img
+									alt={record.login}
+									style={{
+										maxWidth: "70px",
+									}}
+									src={value}
+								/>
+							),
 					},
-				},
-			}}
-			pageSize={pagination.pageSize}
-			rowsBtn={[
-				{
-					title: "Перейти на Github",
-					handler: (record) => {
-						const otherWindow = window.open();
-						otherWindow.opener = null;
-						otherWindow.location = record.html_url;
+					login: {
+						titleHead: "Логин",
+						filter: {
+							type: "text",
+						},
 					},
-					icon: "link",
-				},
-				{
-					title: "Просмотреть запись",
-					handler: (record) => alert(JSON.stringify(record, null, 4)),
-					icon: "remove_red_eye",
-				},
-			]}
-			custom
-			onFilterHandler={onFilterHandler}
-			onOrderHandler={() => {}}
-			onPageHandler={onPageHandler}
-			pageCount={Math.ceil(total_count / pagination.pageSize) || 1}
-			currentPage={pagination.currentPage}
-		/>
+				}}
+				pageSize={pagination.pageSize}
+				rowsBtn={[
+					{
+						title: "Перейти на Github",
+						handler: (record) => {
+							const otherWindow = window.open();
+							otherWindow.opener = null;
+							otherWindow.location = record.html_url;
+						},
+						icon: "link",
+					},
+					{
+						title: "Просмотреть запись",
+						handler: () => setShowModal(true),
+						icon: "remove_red_eye",
+					},
+				]}
+				custom
+				onFilterHandler={onFilterHandler}
+				onOrderHandler={() => {}}
+				onPageHandler={onPageHandler}
+				pageCount={Math.ceil(total_count / pagination.pageSize) || 1}
+				currentPage={pagination.currentPage}
+			/>
+		</>
 	);
 };
 
