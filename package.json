@@ -3,9 +3,12 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
-		"@asosunoff/react-table": "0.0.8",
+		"@asosunoff/react-table": "0.0.10",
 		"axios": "^0.21.0",
+		"classnames": "^2.2.6",
+		"immer": "^8.0.0",
 		"material-icons": "^0.3.1",
+		"node-sass": "^4.14.1",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-scripts": "3.4.3",
