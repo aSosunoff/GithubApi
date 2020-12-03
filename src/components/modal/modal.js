@@ -17,19 +17,12 @@ function Footer() {
 	return null;
 }
 
-const Modal = ({
-	isShow,
-	onHideModal,
-	children,
-	widthBody = "500px",
-	transparentBody,
-}) => {
-	const uniqID = useMemo(() => getUnicIdModal(), []);
+Modal.Title = Title;
+Modal.Body = Body;
+Modal.Footer = Footer;
 
-	const backgroundColor = useMemo(
-		() => (transparentBody ? "transparent" : "#fff"),
-		[transparentBody]
-	);
+function Modal({ isShow, onHideModal, children, style }) {
+	const uniqID = useMemo(() => getUnicIdModal(), []);
 
 	const onClick = useCallback(
 		({ target }) =>
@@ -63,39 +56,36 @@ const Modal = ({
 			isShow={isShow}
 			clickHandler={onClick}
 		>
-			<div
-				className={cn(styles["modal-back__item"], uniqID)}
-				style={{ width: widthBody }}
-			>
+			<div className={cn(styles["modal-back__item"], uniqID)} style={style}>
 				{title && (
-					<div className={styles["modal-back__title"]}>
+					<div
+						className={cn(styles["modal-back__title"], title.props.className)}
+						style={title.props.style}
+					>
 						{title.props.children}
 					</div>
 				)}
 
 				{body && (
 					<div
-						className={styles["modal-back__body"]}
-						style={{
-							backgroundColor,
-						}}
+						className={cn(styles["modal-back__body"], body.props.className)}
+						style={body.props.style}
 					>
 						{body.props.children}
 					</div>
 				)}
 
 				{footer && (
-					<div className={styles["modal-back__footer"]}>
+					<div
+						className={cn(styles["modal-back__footer"], footer.props.className)}
+						style={footer.props.style}
+					>
 						{footer.props.children}
 					</div>
 				)}
 			</div>
 		</Backdrop>
 	);
-};
-
-Modal.Title = Title;
-Modal.Body = Body;
-Modal.Footer = Footer;
+}
 
 export default Modal;
