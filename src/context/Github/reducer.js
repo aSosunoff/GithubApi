@@ -1,8 +1,9 @@
 import produce from "immer";
-import { CLEAR_USERS, SEARCH_USERS, GET_USER } from "./types";
+import { CLEAR_USERS, SEARCH_USERS, LOAD_USER_INFO } from "./types";
 
 export const initialState = {
 	users: [],
+	catch: {},
 	user: {},
 	userFullInfo: [],
 	total_count: 0,
@@ -13,8 +14,11 @@ const handlers = {
 		draft.users = users;
 		draft.total_count = total_count;
 	},
-	[GET_USER]: (draft, { user }) => {
-		draft.user = user;
+	[LOAD_USER_INFO]: (draft, { user }) => {
+		draft.catch[user.login] = {
+			user,
+			dateExpires: Date.now() + 5 * 60 * 1000,
+		};
 	},
 	[CLEAR_USERS]: () => {
 		return initialState;

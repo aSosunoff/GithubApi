@@ -2,7 +2,7 @@ import React, { useCallback, useReducer } from "react";
 import axios from "axios";
 import { GithubProvider } from "./context";
 import { GithubReducer, initialState } from "./reducer";
-import { SEARCH_USERS, CLEAR_USERS, GET_USER } from "./types";
+import { SEARCH_USERS, CLEAR_USERS, LOAD_USER_INFO } from "./types";
 import { QueryStringGithub } from "../../utils/QueryStringGithub";
 
 const client_id = process.env.REACT_APP_CLIENT_ID;
@@ -11,8 +11,8 @@ const client_secret = process.env.REACT_APP_CLIENT_SECRET;
 export const GithubState = ({ children }) => {
 	const [state, dispatch] = useReducer(GithubReducer, initialState);
 
-	const getUserInfoByLoginHandler = useCallback(async (value) => {
-		const { data } = await axios.get(`https://api.github.com/users/${value}`, {
+	const getUserInfoByLoginHandler = useCallback(async (login) => {
+		const { data } = await axios.get(`https://api.github.com/users/${login}`, {
 			params: {
 				client_id,
 				client_secret,
@@ -20,7 +20,7 @@ export const GithubState = ({ children }) => {
 		});
 
 		dispatch({
-			type: GET_USER,
+			type: LOAD_USER_INFO,
 			user: data,
 		});
 	}, []);
