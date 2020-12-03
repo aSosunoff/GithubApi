@@ -19,6 +19,7 @@ const App = () => {
 	const {
 		searchUserHandler,
 		clearUserHandler,
+		getUserInfoByLoginHandler,
 		users,
 		total_count,
 	} = useGithubContext();
@@ -121,7 +122,10 @@ const App = () => {
 					},
 					{
 						title: "Просмотреть запись",
-						handler: () => setShowModal(true),
+						handler: async (record) => {
+							await getUserInfoByLoginHandler(record.login);
+							setShowModal(true);
+						},
 						icon: "remove_red_eye",
 					},
 				]}
