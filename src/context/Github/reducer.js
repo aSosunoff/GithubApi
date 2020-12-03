@@ -3,7 +3,7 @@ import { CLEAR_USERS, SEARCH_USERS, LOAD_USER_INFO, GET_USER } from "./types";
 
 export const initialState = {
 	users: [],
-	catch: {},
+	cache: {},
 	user: {},
 	userFullInfo: [],
 	total_count: 0,
@@ -15,7 +15,7 @@ const handlers = {
 		draft.total_count = total_count;
 	},
 	[LOAD_USER_INFO]: (draft, { user }) => {
-		draft.catch[user.login] = {
+		draft.cache[user.login] = {
 			user,
 			dateExpires: Date.now() + 5 * 60 * 1000,
 		};
