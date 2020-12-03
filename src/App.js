@@ -21,6 +21,7 @@ const App = () => {
 		clearUserHandler,
 		getUserInfoByLoginHandler,
 		users,
+		user,
 		total_count,
 	} = useGithubContext();
 
@@ -76,8 +77,24 @@ const App = () => {
 	return (
 		<>
 			<Modal isShow={isShowModal} onHideModal={() => setShowModal(false)}>
-				<Modal.Title>Title</Modal.Title>
-				<Modal.Body>Body</Modal.Body>
+				<Modal.Title>
+					{user.name} ({user.login})
+				</Modal.Title>
+				<Modal.Body
+					style={{
+						gridTemplateColumns: "auto 1fr",
+						gridGap: "15px",
+					}}
+				>
+					<img
+						alt={user.login}
+						style={{
+							maxWidth: "70px",
+						}}
+						src={user.avatar_url}
+					/>
+					<div>{user.bio}</div>
+				</Modal.Body>
 				<Modal.Footer>Footer</Modal.Footer>
 			</Modal>
 

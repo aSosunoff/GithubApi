@@ -62,7 +62,7 @@ export const GithubState = ({ children }) => {
 		});
 	}, []);
 
-	const { users, total_count } = state;
+	const { users, total_count, user } = state;
 
 	return (
 		<GithubProvider
@@ -72,6 +72,7 @@ export const GithubState = ({ children }) => {
 				clearUserHandler,
 				users,
 				total_count,
+				user,
 			}}
 		>
 			{children}
