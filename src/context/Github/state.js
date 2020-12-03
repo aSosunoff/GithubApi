@@ -3,33 +3,10 @@ import axios from "axios";
 import { GithubProvider } from "./context";
 import { GithubReducer, initialState } from "./reducer";
 import { SEARCH_USERS, CLEAR_USERS, GET_USER } from "./types";
+import { QueryStringGithub } from "../../utils/QueryStringGithub";
 
 const client_id = process.env.REACT_APP_CLIENT_ID;
 const client_secret = process.env.REACT_APP_CLIENT_SECRET;
-
-class QueryStringGithub {
-	filter = {};
-
-	constructor(filter) {
-		this.filter = filter;
-	}
-
-	login(login) {
-		return `${encodeURIComponent(login)} in:login`;
-	}
-
-	toString() {
-		return Object.entries(this.filter)
-			.reduce((acc, [name, value]) => {
-				if (name in this) {
-					acc.push(this[name](value));
-				}
-
-				return acc;
-			}, [])
-			.join(" AND ");
-	}
-}
 
 export const GithubState = ({ children }) => {
 	const [state, dispatch] = useReducer(GithubReducer, initialState);
