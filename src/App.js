@@ -83,13 +83,13 @@ const App = () => {
 			<Table
 				title="Таблица"
 				recordStyles={{
-					height: "71px",
+					height: "72px",
 				}}
 				list={users}
 				header={{
 					avatar_url: {
 						width: "100px",
-						titleHead: "Аватар",
+						titleHead: "",
 						format: (value, record) =>
 							value && (
 								<img
