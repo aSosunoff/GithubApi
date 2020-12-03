@@ -13,10 +13,13 @@ export const GithubState = ({ children }) => {
 
 	const getUserInfoByLoginHandler = useCallback(
 		async (login) => {
-			if (login in state.cache && state.cache[login].dateExpires > Date.now()) {
+			if (
+				login in state.cacheUser &&
+				state.cacheUser[login].dateExpires > Date.now()
+			) {
 				dispatch({
 					type: GET_USER,
-					user: state.cache[login].user,
+					user: state.cacheUser[login].user,
 				});
 			} else {
 				const { data } = await axios.get(
@@ -35,7 +38,7 @@ export const GithubState = ({ children }) => {
 				});
 			}
 		},
-		[state.cache]
+		[state.cacheUser]
 	);
 
 	const searchUserHandler = useCallback(async (filter, page, per_page) => {
