@@ -2,7 +2,7 @@ import React, { useCallback, useReducer } from "react";
 import axios from "axios";
 import { GithubProvider } from "./context";
 import { GithubReducer, initialState } from "./reducer";
-import { SEARCH_USERS, CLEAR_USERS, LOAD_USER_INFO } from "./types";
+import { SEARCH_USERS, CLEAR_USERS, LOAD_USER_INFO, GET_USER } from "./types";
 import { QueryStringGithub } from "../../utils/QueryStringGithub";
 
 const client_id = process.env.REACT_APP_CLIENT_ID;
@@ -11,19 +11,32 @@ const client_secret = process.env.REACT_APP_CLIENT_SECRET;
 export const GithubState = ({ children }) => {
 	const [state, dispatch] = useReducer(GithubReducer, initialState);
 
-	const getUserInfoByLoginHandler = useCallback(async (login) => {
-		const { data } = await axios.get(`https://api.github.com/users/${login}`, {
-			params: {
-				client_id,
-				client_secret,
-			},
-		});
+	const getUserInfoByLoginHandler = useCallback(
+		async (login) => {
+			if (login in state.catch && state.catch[login].dateExpires > Date.now()) {
+				dispatch({
+					type: GET_USER,
+					user: state.catch[login].user,
+				});
+			} else {
+				const { data } = await axios.get(
+					`https://api.github.com/users/${login}`,
+					{
+						params: {
+							client_id,
+							client_secret,
+						},
+					}
+				);
 
-		dispatch({
-			type: LOAD_USER_INFO,
-			user: data,
-		});
-	}, []);
+				dispatch({
+					type: LOAD_USER_INFO,
+					user: data,
+				});
+			}
+		},
+		[state.catch]
+	);
 
 	const searchUserHandler = useCallback(async (filter, page, per_page) => {
 		const { data } = await axios.get("https://api.github.com/search/users", {

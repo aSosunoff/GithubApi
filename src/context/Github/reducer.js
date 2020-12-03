@@ -1,5 +1,5 @@
 import produce from "immer";
-import { CLEAR_USERS, SEARCH_USERS, LOAD_USER_INFO } from "./types";
+import { CLEAR_USERS, SEARCH_USERS, LOAD_USER_INFO, GET_USER } from "./types";
 
 export const initialState = {
 	users: [],
@@ -19,6 +19,10 @@ const handlers = {
 			user,
 			dateExpires: Date.now() + 5 * 60 * 1000,
 		};
+		draft.user = user;
+	},
+	[GET_USER]: (draft, { user }) => {
+		draft.user = user;
 	},
 	[CLEAR_USERS]: () => {
 		return initialState;
