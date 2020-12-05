@@ -2,7 +2,13 @@ import React, { useCallback, useReducer } from "react";
 import axios from "axios";
 import { GithubProvider } from "./context";
 import { GithubReducer, initialState } from "./reducer";
-import { SEARCH_USERS, CLEAR_USERS, LOAD_USER_INFO, GET_USER } from "./types";
+import {
+	SEARCH_USERS,
+	CLEAR_USERS,
+	LOAD_USER_INFO,
+	SET_LOGIN_USER,
+	SET_USERS_KEY,
+} from "./types";
 import { QueryStringGithub } from "../../utils/QueryStringGithub";
 
 const client_id = process.env.REACT_APP_CLIENT_ID;
@@ -14,14 +20,11 @@ export const GithubState = ({ children }) => {
 	const getUserInfoByLoginHandler = useCallback(
 		async (login) => {
 			if (
-				login in state.cacheUser &&
-				state.cacheUser[login].dateExpires > Date.now()
+				!(
+					login in state.cacheUser &&
+					state.cacheUser[login].dateExpires > Date.now()
+				)
 			) {
-				dispatch({
-					type: GET_USER,
-					user: state.cacheUser[login].user,
-				});
-			} else {
 				const { data } = await axios.get(
 					`https://api.github.com/users/${login}`,
 					{
@@ -37,27 +40,53 @@ export const GithubState = ({ children }) => {
 					user: data,
 				});
 			}
+
+			dispatch({
+				type: SET_LOGIN_USER,
+				login,
+			});
 		},
 		[state.cacheUser]
 	);
 
-	const searchUserHandler = useCallback(async (filter, page, per_page) => {
-		const { data } = await axios.get("https://api.github.com/search/users", {
-			params: {
-				q: `${new QueryStringGithub(filter)}`,
-				client_id,
-				client_secret,
-				page,
-				per_page,
-			},
-		});
+	const searchUserHandler = useCallback(
+		async (filter, page, per_page) => {
+			const usersKey = `${page}_${per_page}_${new QueryStringGithub(filter)}`;
 
-		dispatch({
-			type: SEARCH_USERS,
-			users: data.items,
-			total_count: data.total_count,
-		});
-	}, []);
+			if (
+				!(
+					usersKey in state.cacheUsers &&
+					state.cacheUsers[usersKey].dateExpires > Date.now()
+				)
+			) {
+				const { data } = await axios.get(
+					"https://api.github.com/search/users",
+					{
+						params: {
+							q: `${new QueryStringGithub(filter)}`,
+							client_id,
+							client_secret,
+							page,
+							per_page,
+						},
+					}
+				);
+
+				dispatch({
+					type: SEARCH_USERS,
+					usersKey,
+					users: data.items,
+					total_count: data.total_count,
+				});
+			}
+
+			dispatch({
+				type: SET_USERS_KEY,
+				usersKey,
+			});
+		},
+		[state.cacheUsers]
+	);
 
 	const clearUserHandler = useCallback(() => {
 		dispatch({
@@ -65,7 +94,7 @@ export const GithubState = ({ children }) => {
 		});
 	}, []);
 
-	const { users, total_count, user } = state;
+	const { usersKey, cacheUsers, cacheUser, login } = state;
 
 	return (
 		<GithubProvider
@@ -73,9 +102,9 @@ export const GithubState = ({ children }) => {
 				getUserInfoByLoginHandler,
 				searchUserHandler,
 				clearUserHandler,
-				users,
-				total_count,
-				user,
+				users: cacheUsers[usersKey]?.users || [],
+				total_count: cacheUsers[usersKey]?.total_count || 0,
+				user: cacheUser[login]?.user || {},
 			}}
 		>
 			{children}

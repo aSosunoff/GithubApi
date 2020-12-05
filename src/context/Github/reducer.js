@@ -1,31 +1,40 @@
 import produce from "immer";
-import { CLEAR_USERS, SEARCH_USERS, LOAD_USER_INFO, GET_USER } from "./types";
+import {
+	CLEAR_USERS,
+	SEARCH_USERS,
+	LOAD_USER_INFO,
+	SET_LOGIN_USER,
+	SET_USERS_KEY,
+} from "./types";
 
 export const initialState = {
-	users: [],
+	cacheUsers: {},
+	usersKey: "",
 	cacheUser: {},
-	user: {},
-	total_count: 0,
+	login: "",
 };
 
 const handlers = {
-	[SEARCH_USERS]: (draft, { users, total_count }) => {
-		draft.users = users;
-		draft.total_count = total_count;
+	[SEARCH_USERS]: (draft, { usersKey, users, total_count }) => {
+		draft.cacheUsers[usersKey] = {
+			users,
+			total_count,
+			dateExpires: Date.now() + 5 * 60 * 1000,
+		};
+	},
+	[SET_USERS_KEY]: (draft, { usersKey }) => {
+		draft.usersKey = usersKey;
 	},
 	[LOAD_USER_INFO]: (draft, { user }) => {
 		draft.cacheUser[user.login] = {
 			user,
 			dateExpires: Date.now() + 5 * 60 * 1000,
 		};
-		draft.user = user;
 	},
-	[GET_USER]: (draft, { user }) => {
-		draft.user = user;
+	[SET_LOGIN_USER]: (draft, { login }) => {
+		draft.login = login;
 	},
-	[CLEAR_USERS]: () => {
-		return initialState;
-	},
+	[CLEAR_USERS]: () => initialState,
 	DEFAULT: (state) => state,
 };
 

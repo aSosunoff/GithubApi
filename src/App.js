@@ -62,7 +62,7 @@ const App = () => {
 			if (!Object.keys(filterState).length) {
 				return;
 			}
-
+		
 			searchUserHandler(filterState, currentPage, pagination.pageSize);
 			setPagination((prev) => ({
 				...prev,
