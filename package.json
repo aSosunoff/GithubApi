@@ -3,6 +3,7 @@
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
+		"@asosunoff/react-modal": "0.0.3",
 		"@asosunoff/react-table": "0.0.11",
 		"axios": "^0.21.0",
 		"classnames": "^2.2.6",

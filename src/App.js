@@ -6,7 +6,7 @@ import { withHOC } from "./HOC/withHOC";
 import { GithubState } from "./context/Github/state";
 import { useGithubContext } from "./context/Github/context";
 /* import Loader from "./components/loader"; */
-import Modal from "./components/modal";
+import Modal from "@asosunoff/react-modal";
 
 const App = () => {
 	const [filterState, setFilter] = useState({});
